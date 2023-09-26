@@ -1,0 +1,177 @@
+﻿<!DOCTYPE html>
+<html>
+<head> 
+  <meta charset=utf-8>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sample Preview HTML</title>
+
+<style>
+* {
+  box-sizing: border-box;
+  }
+html, body {
+  height: 100%;
+  width: 100%;
+  }
+body {
+  padding: 0;
+  margin: 0;
+  font: normal 14px "Consolas", Monospace;
+  overflow: hidden;
+  }
+.container {
+  width: 100%;
+  height: 100%;
+  padding: 0 20px;
+  margin: 0 auto;
+  overflow: auto;
+  background-color: #F9F7C2
+  }
+h1, h2 {
+  margin: 10px auto 0;
+  text-align: center;
+  font: bold 27px Times; 
+  color: blue; 
+  padding: 0; 
+  text-decoration: underline; 
+  text-shadow: 1px 1px 1px #fff, -1px -1px 1px #fff, 0 0 6px #000
+  }
+h2 {
+  font-size: 20px;
+  margin: 0; 
+  text-decoration: none;
+  padding: 0;
+  color: darkred;
+  }
+textarea {
+  display: block;
+  width: 100%;
+  height: calc(100% - 22px);    height: 150px;
+  padding: 6px;
+  margin: 0;                    margin: 10px auto 10px;
+  font: normal 14px Monospace;
+  border: 1px solid orange;
+  background-color: lightyellow;
+  resize: none;
+  cursor: auto!important;
+  }
+input, textarea, iframe {
+  outline: none!important;
+}
+button, input[type=button]:hover {
+ cursor: pointer;
+}
+.imageBox {
+  width: 100%;
+  min-height: 30px;
+  margin: 10px auto;
+  padding: 4px;
+  text-align: center;
+  font-size: 0;
+  background-color: #888;
+  border: 1px solid #000;
+}
+.imageBox img, .imageBox canvas  {
+  max-width: 100%;
+  height: auto;
+}
+#canvasPrev {
+  max-width: 100%;
+  height: auto;
+  margin: 0 auto;
+  border: 1px solid #000;
+  background: url('data:image/webp;base64,UklGRkQAAABXRUJQVlA4IDgAAADQAQCdASoKAAoAAIAOJaQAAudlk13mAAD+//4Kn9WRnOaxX4tuiRSEve45zt1EowEOBfNgalwAAA==');
+}
+.bgLightGrey {
+  background-color: #eee;
+}
+.bgGrey {
+  background-color: #999;
+}
+.bgDarkGrey {
+  background-color: #555;
+}
+input[type=button], button, #png, #jpg, #webp {
+  margin: 5px 2px 0;
+  padding: 0 12px 6px;
+  font-size: 16px;
+  border-radius: 6px;
+  box-shadow: -1px -1px 5px #333;
+  outline: 2px solid #eee!important;
+}
+input[type=button]:active, button:active, #png:active, #jpg:active, #webp:active{
+  border: 1px solid #222;
+  outline: 2px solid #fff!important;  
+}
+img.raster, svg.raster {
+  background: url('data:image/webp;base64,UklGRkQAAABXRUJQVlA4IDgAAADQAQCdASoKAAoAAIAOJaQAAudlk13mAAD+//4Kn9WRnOaxX4tuiRSEve45zt1EowEOBfNgalwAAA==');
+  border: 3px double #000;
+  padding: 1px;
+}
+.gridBox {
+  display: grid;
+  width: 100%;
+  height: 200px;
+  margin: 10px auto;
+  gap: 4px;
+  grid-template-columns: calc(50% - 2px) calc(50% - 2px);
+  background: #eee;
+  border: 1px solid #666;
+}
+.grid1, .grid2 {
+  width: 100%;
+  height: 100%;
+  background-color: #eaedf0;
+  padding: 3px;
+  border: 1px solid #888;
+}
+.title {
+  height: 22px;
+  padding: 1px 6px 0 6px;
+  font: normal 14px Arial;
+  }
+.ctrHVbox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.df { display: flex; } .db { display: block; } .dib { display: inline-block; } .fl { float: left; } .fr { float: right; } .fn { float: none; } .tac { text-align: center; } .tal { text-align: left; } .tar { text-align: right; }
+</style>
+
+
+
+</head>
+<body>
+
+<div class=container>
+
+<h1>Convert an Image to Canvas with JavaScript</h1>
+<h2>from img tag convert to canvas and get base64</h2>
+  <div class=imageBox>
+    <img src="https://raw.githubusercontent.com/lambedigdoyo/lib/main/images/GR-city-night-1.jpg" id="oriImage" />
+  </div>
+  <div id=canvasBox class=imageBox><canvas id=canvas></canvas></div>
+  <div class=imageBox>
+    <img id="base64" />
+  </div>  
+</div>
+
+
+
+<script>
+var image = document.getElementById('oriImage');
+var canvasBox = document.getElementById('canvasBox');
+    var canvas = document.getElementById('canvas');
+function toDataUrl() {
+    canvas.width = image.naturalWidth;
+    canvas.height = image.naturalHeight;
+    canvas.getContext('2d').drawImage(image, 0, 0); 
+      var base64 = canvas.toDataURL();
+      document.getElementById('base64').src = base64;
+    };
+    if (image.complete) toDataUrl(image);
+    else image.onload = toDataUrl;
+</script>
+
+</body>
+</html>
