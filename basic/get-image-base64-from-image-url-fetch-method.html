@@ -3,7 +3,7 @@
 <head> 
   <meta charset=utf-8>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Get Image Base64 from Image URL</title>
+  <title>Get Image Base64 from Image URL (fetch Method)</title>
 
 <style>
 * {
@@ -101,7 +101,7 @@ textarea, input, button {
 </head>
 <body>
 
-<h1>Get Image Base64 from Image URL</h1>
+<h1>Get Image Base64 from Image URL (fetch-Method)</h1>
 <h2>Javascript: async, fetch, FileReader()</h2>
 <strong>Paste Image Link here: </strong><input type=text id=inputURL value='https://raw.githack.com/lambedigdoyo/lib/main/images/GR2.svg'  style='width: calc(100% - 220px); margin: 10px 0 10px 10px' />
 
@@ -118,7 +118,7 @@ textarea, input, button {
   </div>  
 </div>
 <h4>base64:</h4>
-<textarea id="code1" spellcheck=false wrap=logical></textarea>
+<textarea id="code1" spellcheck=false wrap=logical style='height: 100px'></textarea>
 <h4>Sample (image link):</h4>
 <textarea id="code1" spellcheck=false wrap=logical >https://picsum.photos/400/205
 https://raw.githack.com/lambedigdoyo/lib/main/images/GR2.svg
@@ -127,7 +127,7 @@ https://raw.githack.com/lambedigdoyo/lib/main/images/cah-ndase.png
 https://raw.githack.com/lambedigdoyo/lib/main/images/GR-city-night-1.jpg</textarea>
 
 <script>
-var inputURL = $('#inputURL');
+var inputURL = document.getElementById('inputURL');
 /* or use this 
 var convertToBase64 = async ()=> { 
 */
