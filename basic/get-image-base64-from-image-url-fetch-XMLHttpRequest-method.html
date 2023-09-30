@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+<head> 
+  <meta charset=utf-8>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Get Image Base64 from Image URL (fetch & XMLHttpRequest Method)</title>
+
+<style>
+* {
+  box-sizing: border-box;
+  }
+html, body {
+  height: 100%;
+  width: 100%;
+  }
+body {
+  padding: 10px 20px;
+  margin: 0;
+  font: normal 14px "Consolas", Monospace;
+  }
+h1, h2 {
+  margin: 10px auto 0;
+  text-align: center;
+  font: bold 27px Times; 
+  color: blue; 
+  padding: 0; 
+  text-decoration: underline; 
+  text-shadow: 1px 1px 1px #fff, -1px -1px 1px #fff, 0 0 6px #000
+  }
+h2, h3 {
+  font-size: 20px;
+  margin: 0; 
+  text-decoration: none;
+  padding: 0;
+  color: darkred;
+  }
+h3 {
+  font-size: 18px;
+  color: #0B3E46;
+}  
+textarea {
+  display: block;
+  width: 100%;
+  height: calc(100% - 22px);    height: 200px;
+  padding: 6px;
+  margin: 0;                    margin: 10px auto 10px;
+  font: normal 14px Monospace;
+  border: 1px solid orange;
+  background-color: lightyellow;
+  resize: none;
+  cursor: auto!important;
+  }
+textarea, input, button {
+  outline: none!important;
+}
+.gridBox {
+  display: grid;
+  width: 100%;
+  height: auto;
+  margin: 10px auto;
+  gap: 4px;
+  grid-template-columns: calc(50% - 2px) calc(50% - 2px);
+  font-size: 0; 
+}
+.grid1, .grid2 {
+  width: 100%;
+  background-color: #eaedf0;
+  padding: 0;
+}
+.title {
+  background: #333;
+  text-align: center;
+  color: #eee;
+  font-weight: bold;
+  height: 22px;
+  padding: 1px 6px 0 6px;
+  font: normal 14px Arial;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;  
+  }
+.imageBox {
+  background-color: #fd9;
+  font-size: 0;
+  border: 3px double #555;
+  padding: 3px;
+}
+.imageBox img, .imageBox canvas {
+  display: flex;
+  max-width: 100%;
+  height: auto;
+  border: 1px solid #666;
+  margin: 0 auto;
+  background: url('data:image/octet-stream;base64,iVBORw0KGgoAAAANSUhEUgAAABYAAAAWCAYAAADEtGw7AAAAbElEQVQ4T+2UMQ7AIAwDjUBIiP8/kYkZFCQIbYfSoYsfEM/WDac4rpSyQSTGiJwzUkpEG3AGfj2ZinMxpuJTUWullue9x7O+EAK3vN47BVZVzDmx1uLA+w7THGOgtQYRYepwBj6/wlSYit9oLtnet2icvPquAAAAAElFTkSuQmCC');
+}
+.centerBox {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+</style>
+
+</head>
+<body>
+
+<h1>Get Image Base64 from Image URL (fetch & XMLHttpRequest Method)</h1>
+<h2>Javascript: async, fetch, XMLHttpRequest, FileReader()</h2>
+<strong>Paste Image Link here: </strong><input type=text id=inputURL value='https://picsum.photos/250/180'  style='width: calc(100% - 220px); margin: 10px 0 10px 10px' />
+
+<div class=gridBox>
+  <div class=grid1><div class=title>Image Display: from url</div>
+    <div class='imageBox centerBox'>
+      <img id=urlPrev1 style="max-width: 43%;"/>
+    </div>
+  </div>
+  <div class=grid2><div class=title>Result: base64 Image Display</div>
+    <div class='imageBox centerBox'>
+      <img id=base64 style="max-width: 43%;"/>
+    </div>
+  </div>  
+</div>
+<h3>Result: base64</h3>
+<textarea id="code1" spellcheck=false wrap=logical></textarea>
+<h3>Sample Image Link:</h3>
+<textarea id="code" spellcheck=false wrap=logical style='height: 100px'>https://picsum.photos/250/180
+https://raw.githack.com/lambedigdoyo/lib/main/images/GR2.svg
+https://raw.githack.com/lambedigdoyo/lib/main/images/GR-cah-ndase.png
+https://raw.githack.com/lambedigdoyo/lib/main/images/cah-ndase.png
+https://raw.githack.com/lambedigdoyo/lib/main/images/GR-city-night-1.jpg</textarea>
+
+
+<script>
+/* 2023, September */
+var inputURL = document.getElementById('inputURL');
+var urlPrev1 = document.getElementById('urlPrev1');
+var URL = window.URL || window.webkitURL || window;
+
+window.onload = function toDataUrl() {
+  var url = inputURL.value;
+  var xhr = new XMLHttpRequest();
+  xhr.onload = async () => {
+    var file = await (await fetch(url)).blob();
+    var _URL = URL.createObjectURL(file);
+    urlPrev1.src = _URL;
+
+    var rdr = new FileReader();
+    var img = new Image();
+    img.onload = () => {
+
+      rdr.onloadend = function () {
+        var myBase64 = rdr.result;
+        document.getElementById('code1').value = myBase64;
+        document.getElementById('base64').src = myBase64;
+      }
+      rdr.readAsDataURL(file); //(xhr.response); 
+    }
+    img.src = url;
+  };
+  xhr.open('GET', url);
+  xhr.responseType = 'blob';
+  xhr.send();
+}
+inputURL.oninput = toDataUrl;
+// toDataUrl();
+/* 2023, September - Lambedigdoyo */
+</script>
+
+</body>
+</html>
