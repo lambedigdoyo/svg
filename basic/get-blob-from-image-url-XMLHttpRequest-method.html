@@ -5,6 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Get blob from Image Link (URL): XMLHttpRequest() Method</title>
 
+<script src="./syntax-highlighter/main/prettify/js/prettify-src.js"></script>  
+<script src='./syntax-highlighter/main/prettify/js/lang-css.js'></script>
+<link rel="stylesheet" href="./syntax-highlighter/main/prettify/css/desert.css"/>
+  
 <style>
 * {
   box-sizing: border-box;
@@ -64,7 +68,11 @@ textarea {
 input, textarea, iframe {
   outline: none!important;
 }
-
+pre.prettyprint { 
+  font: normal 14px Monospace;
+  margin: 10px auto; 
+  padding: 15px 0;
+}
 </style>
 
 </head>
@@ -104,6 +112,28 @@ imageLink.oninput = getBlobURL;
 getBlobURL()
 </script></textarea>
 
+<pre class="prettyprint pelangi lang-html linenums">&ltscript&gt;
+var imageLink = document.getElementById('imageLink');
+
+function getBlobURL() {
+  var url = imageLink.value;
+  var xhr = new XMLHttpRequest();
+  xhr.open('get', url, true);
+  xhr.responseType = 'blob';
+  xhr.onload = () =&gt; {
+    if (xhr.status === 200) {
+      var file = xhr.response;
+      var urlBlob = URL.createObjectURL(file);
+      document.querySelector('#blobURL').value = urlBlob;
+      document.querySelector('#blobPreview').src = urlBlob;
+    }
+  }
+  xhr.send();
+  document.getElementById('imageURL').value = url;
+}
+imageLink.oninput = getBlobURL;
+getBlobURL()
+&lt;/script&gt;</pre>
 
 <script>
 var imageLink = document.getElementById('imageLink');
