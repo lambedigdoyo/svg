@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head> 
+  <meta charset=utf-8>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Get blob from Image Link (URL): XMLHttpRequest() Method</title>
+
+<style>
+* {
+  box-sizing: border-box;
+  }
+html, body {
+  height: 100%;
+  width: 100%;
+  }
+body {
+  padding: 0 100px;
+  margin: 0;
+  font: normal 14px "Consolas", Monospace;
+  background-color: #666;
+  }
+.container {
+  width: 100%;
+  height: 100%;
+  padding: 10px 30px;
+  margin: 0 auto;
+  overflow: auto;
+  background-color:#DCE4E2;
+  border: 6px solid #222;
+  position: relative;
+  }
+h1, h2 {
+  margin: 10px auto 0;
+  text-align: center;
+  font: bold 27px Times; 
+  color: blue; 
+  padding: 0; 
+  text-decoration: underline; 
+  text-shadow: 1px 1px 1px #fff, -1px -1px 1px #fff, 0 0 6px #000
+  }
+h2, h3 {
+  font-size: 20px;
+  margin: 0; 
+  text-decoration: none;
+  padding: 0;
+  color: darkred;
+  }
+h3 {
+  font-size: 18px;
+  color: darkgreen;
+}
+textarea {
+  display: block;
+  width: 100%;
+  height: calc(100% - 200px);
+  padding: 6px;
+  margin: 0;                    margin: 10px auto 10px;
+  font: normal 14px Monospace;
+  border: 1px solid orange;
+  background-color: lightyellow;
+  resize: none;
+  cursor: auto!important;
+  }
+input, textarea, iframe {
+  outline: none!important;
+}
+
+</style>
+
+</head>
+<body>
+
+<div class=container>
+<h1>Get blob from Image Link/url</h1>
+<h2>Javascript: "XMLHttpRequest()" Method</h2>
+Paste Image Link here: <input type=text id=imageLink value='https://raw.githubusercontent.com/lambedigdoyo/lib/main/images/svg/GR-anima-1c.svg' style='width: calc(100% - 200px); margin: 10px 0 10px 10px; display: inline-block'>
+<h3>URL:</h3>
+<input type=text id=imageURL style='width: calc(100% - 10px); margin: 10px auto; display: block'>
+<h3>blobURL:</h3>
+<input type=text id=blobURL style='width: calc(100% - 10px); margin: 10px auto; display: block'>
+
+<img id=blobPreview style='position: fixed; top: 10px; right: 10px; width: 80px; height: auto; background-color: #eee; padding: 3px;' />
+
+<textarea id="code" spellcheck=false wrap=logical><script>
+var imageLink = document.getElementById('imageLink');
+
+function getBlobURL() {
+  var url = imageLink.value;
+  var xhr = new XMLHttpRequest();
+  xhr.open('get', url, true);
+  xhr.responseType = 'blob';
+  xhr.onload = () => {
+    if (xhr.status === 200) {
+      var file = xhr.response;
+      var urlBlob = URL.createObjectURL(file);
+      document.querySelector('#blobURL').value = urlBlob;
+      document.querySelector('#blobPreview').src = urlBlob;
+    }
+  }
+  xhr.send();
+  document.getElementById('imageURL').value = url;
+}
+imageLink.oninput = getBlobURL;
+getBlobURL()
+</script></textarea>
+
+
+<script>
+var imageLink = document.getElementById('imageLink');
+
+function getBlobURL() {
+  var url = imageLink.value;
+  var xhr = new XMLHttpRequest();
+  xhr.open('get', url, true);
+  xhr.responseType = 'blob';
+  xhr.onload = () => {
+    if (xhr.status === 200) {
+      var file = xhr.response;
+      var urlBlob = URL.createObjectURL(file);
+      document.querySelector('#blobURL').value = urlBlob;
+      document.querySelector('#blobPreview').src = urlBlob;
+    }
+  }
+  xhr.send();
+  document.getElementById('imageURL').value = url;
+}
+imageLink.oninput = getBlobURL;
+getBlobURL()
+</script>
