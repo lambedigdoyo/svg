@@ -136,7 +136,7 @@ var inputURL = document.getElementById('inputURL');
 var urlPrev1 = document.getElementById('urlPrev1');
 var URL = window.URL || window.webkitURL || window;
 
-window.onload = function toDataUrl() {
+function toDataUrl() {
   var url = inputURL.value;
   var xhr = new XMLHttpRequest();
   xhr.onload = async () => {
@@ -162,7 +162,7 @@ window.onload = function toDataUrl() {
   xhr.send();
 }
 inputURL.oninput = toDataUrl;
-// toDataUrl();
+toDataUrl();
 /* 2023, September - Lambedigdoyo */
 </script>
 
