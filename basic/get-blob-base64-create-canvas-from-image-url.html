@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html>
+<head> 
+  <meta charset=utf-8>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Get blob, base64 & create canvas from Image Link (URL): XMLHttpRequest() Method</title>
+
+<style>
+* {
+  box-sizing: border-box;
+  }
+html, body {
+  height: 100%;
+  width: 100%;
+  }
+body {
+  padding: 0 20%;
+  margin: 0;
+  font: normal 14px "Consolas", Monospace;
+  background-color: #666;
+  }
+.container {
+  width: 100%;
+  height: 100%;
+  padding: 10px 20px;
+  margin: 0 auto;
+  overflow: auto;
+  background-color:#DCE4E2;
+  border: 6px solid #222;
+  position: relative;
+  }
+h1, h2 {
+  margin: 10px auto 0;
+  text-align: center;
+  font: bold 27px Times; 
+  color: blue; 
+  padding: 0; 
+  text-decoration: underline; 
+  text-shadow: 1px 1px 1px #fff, -1px -1px 1px #fff, 0 0 6px #000
+  }
+h2, h3 {
+  font-size: 20px;
+  margin: 0; 
+  text-decoration: none;
+  padding: 0;
+  color: darkred;
+  }
+h3 {
+  font-size: 18px;
+  color: darkgreen;
+}
+textarea {
+  display: block;
+  width: 100%;
+  height: calc(100% - 200px);  height: 150px;
+  padding: 6px;
+  margin: 0;                    margin: 10px auto 10px;
+  font: normal 14px Monospace;
+  border: 1px solid orange;
+  background-color: lightyellow;
+  resize: none;
+  cursor: auto!important;
+  }
+input, textarea, iframe {
+  outline: none!important;
+}
+.imageLinkPreviewBox, .cvsPreviewBox, .blobPreviewBox, .base64PreviewBox, .cvPreviewBox {
+  width: 19%;
+  position: fixed;
+  backgound-color: rgba(255,255,255,0.8);
+  border: 1px solid #eee;
+}
+.imageLinkPreviewBox {
+  top: 38%;
+  left: 5px;
+}
+.cvsPreviewBox {
+  left: 5px;
+  bottom: 5px;
+}
+.blobPreviewBox {
+  left: 5px;
+  top: 5px;
+}
+.base64PreviewBox {
+  right: 5px;
+  top: 5px;
+}
+.cvPreviewBox {
+  right: 5px;
+  bottom: 5px;
+}
+.contentBox {
+  width: 100%;
+  text-align: center;
+  display: flex;
+  align-item: center;
+  justify-content: center;
+  backgound-color: rgba(255,255,255,0.8);
+  flex-direction: column;
+}
+img, canvas {
+  background-color: #ffe;
+  display: flex;
+}
+.title {
+  display: inline-block;
+  height: 22px;
+  padding: 2px 0 0;
+  width: 100%;
+  color: #fff;
+  background-color: #000;
+}
+</style>
+
+</head>
+<body>
+<!-- == 
+https://raw.githubusercontent.com/lambedigdoyo/lib/main/images/svg/GR-anima-1c.svg
+ == -->
+<div class=container>
+<h1>Get blob, base64 & Create canvas from Image Link (url)</h1>
+<h2>Javascript: "XMLHttpRequest()" Method</h2>
+Paste Image Link here: <input type=text id=imageLink value='https://raw.githack.com/lambedigdoyo/lib/main/images/GR-city-night-1.jpg' style='width: calc(100% - 200px); margin: 10px 0 10px 10px; display: inline-block'>
+<h3>URL:</h3>
+<input type=text id=imageURL style='width: calc(100% - 10px); margin: 10px auto; display: block'>
+<h3>blobURL:</h3>
+<input type=text id=blobURL style='width: calc(100% - 10px); margin: 10px auto; display: block'>
+
+<div class=imageLinkPreviewBox>
+  <div class=contentBox>
+    <div class=title>Image from URL</div>
+    <img id=imageLinkPreview style='max-width: 100%' />
+  </div>
+</div>
+
+<div class=cvsPreviewBox>
+  <div class=contentBox>
+    <div class=title>canvas from url</div>
+    <canvas id=cvs style='max-width: 100%'></canvas>
+  </div>
+</div>
+
+<div class=blobPreviewBox>
+  <div class=contentBox>
+    <div class=title>Image: blob URL</div>  
+    <img id=blobPreview style='max-width: 100%' />
+  </div>
+</div>
+
+<div class=base64PreviewBox>
+  <div class=contentBox>
+    <div class=title>Image: base64</div>
+    <img id=base64Preview style='max-width: 100%;' />
+  </div>
+</div>
+
+<div class=cvPreviewBox>
+  <div class=contentBox>
+    <div class=title>canvas from base64</div>
+    <canvas id=cv style='max-width: 100%'></canvas>
+  </div>
+</div>
+
+<h3>base64:</h3>
+<textarea id="code1" spellcheck=false wrap=logical></textarea>
+
+<h3>Sample Image Link (url):</h3>
+<textarea id="code" spellcheck=false wrap=logical>https://picsum.photos/230/180
+https://raw.githubusercontent.com/lambedigdoyo/lib/main/images/svg/GR-anima-1c.svg
+https://raw.githack.com/lambedigdoyo/lib/main/images/GR-city-night-1.jpg
+https://www.google.de/images/srpr/logo11w.png
+</textarea>
+
+<pre class=pelangi>var imageLink = document.getElementById('imageLink');
+var imageLinkPreview = document.getElementById('imageLinkPreview');
+var blobURL = document.getElementById("blobURL");
+var blobPreview = document.getElementById("blobPreview");
+var base64Preview = document.getElementById("base64Preview");
+var imageURL = document.getElementById('imageURL');
+var code1 = document.getElementById("code1");
+var cv = document.getElementById('cv');
+
+function getALL() {
+  imageLinkPreview.style.display = 'none';
+  code1.value = '';
+  blobPreview.src = '';
+  blobURL.value = '';
+  base64Preview.src = '';
+  cv.style.display = 'none';
+  
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', imageLink.value, true);
+  xhr.responseType = 'blob';
+  xhr.onload = function(e) {
+    if (this.status == 200) {
+      var blob = this.response;
+      var urlBlob = window.URL.createObjectURL(blob); 
+      blobURL.value = urlBlob;
+      if (imageLink.value == 0) {
+        blobURL.value = '';
+      }
+      blobPreview.style.display = 'block';
+      blobPreview.src = urlBlob;
+      var rdr = new FileReader();
+      rdr.onloadend = () => {
+        var base64 = rdr.result; //alert(base64); 
+        base64Preview.src = base64;
+        if (imageLink.value == 0) {
+          blobPreview.style.display = 'none';
+          base64Preview.style.display = 'none';
+          code1.value = '';
+        } else {
+          blobPreview.style.display = 'block';
+          base64Preview.style.display = 'block';
+          code1.value = base64;
+        }
+        var img = base64Preview;
+
+        img.onload = () => {
+          var cv = document.getElementById('cv');
+          cv.width = img.width;
+          cv.height = img.height;
+          cv.getContext('2d').drawImage(img, 0, 0, img.width, img.height);
+          var cvData = cv.toDataURL('image/png');
+
+          if (imageLink.value == 0) {
+            cv.style.display = 'none';
+          } else {
+            cv.style.display = 'block';
+          }
+
+        }
+        img.src = base64;
+      }
+      rdr.readAsDataURL(blob);
+    }
+  };
+  xhr.onerror = function(e) {
+    alert("Ow...! The document cannot be accessed for some reason...");
+  };
+  xhr.send();
+
+  imageURL.value = imageLink.value;
+  var imgX = imageLinkPreview;
+  imgX.onload = () => {
+    var cvs = document.getElementById('cvs');
+    cvs.width = imgX.width;
+    cvs.height = imgX.height;
+    cvs.getContext('2d').drawImage(imgX, 0, 0, imgX.width, imgX.height);
+    var cvsData = cvs.toDataURL('image/png');
+    alert(cvsData);
+    
+  }
+
+  imgX.src = imageLink.value;
+  imageLinkPreview.src = imageLink.value;
+  
+    if (imageLink.value == 0) {
+      imageLinkPreview.style.display = 'none';
+      cvs.style.display = 'none';
+    } else {
+      imageLinkPreview.style.display = 'block';
+      cvs.style.display = 'block';
+    }
+}
+imageLink.oninput = getALL;
+getALL()</pre>
+
+<script>
+var imageLink = document.getElementById('imageLink');
+var imageLinkPreview = document.getElementById('imageLinkPreview');
+var blobURL = document.getElementById("blobURL");
+var blobPreview = document.getElementById("blobPreview");
+var base64Preview = document.getElementById("base64Preview");
+var imageURL = document.getElementById('imageURL');
+var code1 = document.getElementById("code1");
+var cv = document.getElementById('cv');
+
+function getALL() {
+  imageLinkPreview.style.display = 'none';
+  code1.value = '';
+  blobPreview.src = '';
+  blobURL.value = '';
+  base64Preview.src = '';
+  cv.style.display = 'none';
+  
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', imageLink.value, true);
+  xhr.responseType = 'blob';
+  xhr.onload = function(e) {
+    if (this.status == 200) {
+      var blob = this.response;
+      var urlBlob = window.URL.createObjectURL(blob); 
+      blobURL.value = urlBlob;
+      if (imageLink.value == 0) {
+        blobURL.value = '';
+      }
+      blobPreview.style.display = 'block';
+      blobPreview.src = urlBlob;
+      var rdr = new FileReader();
+      rdr.onloadend = () => {
+        var base64 = rdr.result; //alert(base64); 
+        base64Preview.src = base64;
+        if (imageLink.value == 0) {
+          blobPreview.style.display = 'none';
+          base64Preview.style.display = 'none';
+          code1.value = '';
+        } else {
+          blobPreview.style.display = 'block';
+          base64Preview.style.display = 'block';
+          code1.value = base64;
+        }
+        var img = base64Preview;
+
+        img.onload = () => {
+          var cv = document.getElementById('cv');
+          cv.width = img.width;
+          cv.height = img.height;
+          cv.getContext('2d').drawImage(img, 0, 0, img.width, img.height);
+          var cvData = cv.toDataURL('image/png');
+
+          if (imageLink.value == 0) {
+            cv.style.display = 'none';
+          } else {
+            cv.style.display = 'block';
+          }
+
+        }
+        img.src = base64;
+      }
+      rdr.readAsDataURL(blob);
+    }
+  };
+  xhr.onerror = function(e) {
+    alert("Ow...! The document cannot be accessed for some reason...");
+  };
+  xhr.send();
+
+  imageURL.value = imageLink.value;
+  var imgX = imageLinkPreview;
+  imgX.onload = () => {
+    var cvs = document.getElementById('cvs');
+    cvs.width = imgX.width;
+    cvs.height = imgX.height;
+    cvs.getContext('2d').drawImage(imgX, 0, 0, imgX.width, imgX.height);
+    var cvsData = cvs.toDataURL('image/png');
+    alert(cvsData);
+    
+  }
+
+  imgX.src = imageLink.value;
+  imageLinkPreview.src = imageLink.value;
+  
+    if (imageLink.value == 0) {
+      imageLinkPreview.style.display = 'none';
+      cvs.style.display = 'none';
+    } else {
+      imageLinkPreview.style.display = 'block';
+      cvs.style.display = 'block';
+    }
+}
+imageLink.oninput = getALL;
+getALL()
+</script>
+
+<script src=../src/js/pelangi.js></script>
+<script> peLangi(); </script> 
+
+</body>
+</html>
